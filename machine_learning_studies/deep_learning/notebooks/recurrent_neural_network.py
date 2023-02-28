@@ -14,12 +14,31 @@
 # ---
 
 # %%
+import numpy as np
+import torch
 
+from machine_learning_studies.deep_learning.models.torch_rnn import TorchRNN
 from machine_learning_studies.timeseries.data import syntethic
 
 # %%
-n_steps = 5
+
+n_steps = 2
+batch_size = 1
 series = syntethic.generate_univariate_time_series(
-    batch_size=1,
+    batch_size=batch_size,
     n_steps=n_steps + 1,
 )
+stat_quest_series = np.arange(0, n_steps + 1, dtype=np.float32).reshape(
+    (batch_size, n_steps + 1)
+)[..., np.newaxis]
+
+# %%
+X = torch.from_numpy(stat_quest_series[:, :n_steps])
+y = torch.from_numpy(stat_quest_series[:, -1])
+
+# %%
+rnn_model = TorchRNN(input_size=1, hidden_units=1, output_size=1)
+
+# %%
+outcome = rnn_model(X)
+print(outcome)

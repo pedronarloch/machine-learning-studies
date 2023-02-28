@@ -25,10 +25,18 @@ class TorchRNN(nn.Module):
         """
         super().__init__()
 
-        self._rnn_block = nn.RNN(
-            input_size, output_size, n_layers, batch_first=batch_first
-        )
+        self.input_size = input_size
+        self.hidden_units = hidden_units
+        self.output_size = output_size
+        self.n_layers = n_layers
+        self.batch_first = batch_first
 
+        self._rnn_block = nn.RNN(
+            input_size=self.input_size,
+            hidden_size=self.hidden_units,
+            num_layers=self.n_layers,
+            batch_first=self.batch_first,
+        )
         self.model = nn.Sequential(
             self._rnn_block,
         )
