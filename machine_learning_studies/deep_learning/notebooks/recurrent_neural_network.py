@@ -22,7 +22,7 @@ from machine_learning_studies.timeseries.data import syntethic
 
 # %%
 
-n_steps = 2
+n_steps = 10
 batch_size = 1
 series = syntethic.generate_univariate_time_series(
     batch_size=batch_size,
@@ -40,5 +40,7 @@ y = torch.from_numpy(stat_quest_series[:, -1])
 rnn_model = TorchRNN(input_size=1, hidden_units=1, output_size=1)
 
 # %%
-outcome = rnn_model(X)
+outcome, _ = rnn_model(X)
+
+# %%
 print(outcome)
