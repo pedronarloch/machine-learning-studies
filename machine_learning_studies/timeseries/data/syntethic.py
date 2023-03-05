@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def generate_univariate_time_series(
+def generate_batched_series(
     batch_size: int,
     n_steps: int,
 ):

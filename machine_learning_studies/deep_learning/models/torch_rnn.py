@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 
@@ -37,9 +38,17 @@ class TorchRNN(nn.Module):
             num_layers=self.n_layers,
             batch_first=self.batch_first,
         )
-        self.model = nn.Sequential(
-            self._rnn_block,
-        )
+
+        # Readout layer
+        self.fc = nn.Linear(in_features=hidden_units, out_features=output_size)
 
     def forward(self, x):
-        return self.model(x)
+        output = self._rnn_block(
+            x,
+            self._init_hidden(x.size(0)),
+        )
+        output = self.fc(output[:, -1, :])
+        return output
+
+    def _init_hidden(self, batch_size) -> torch.Tensor:
+        return torch.zeros(self.n_layers, batch_size, self.hidden_units)
